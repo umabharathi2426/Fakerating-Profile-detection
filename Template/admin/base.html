@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+
+{% block usertools %}
+<div id="user-tools">
+    {% if user.is_authenticated %}
+    Welcome,
+    <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+    {% if site_url %}
+        <a href="{{ site_url }}">Home Page</a> /
+    {% endif %}
+    {% if user.has_usable_password %}
+        <a href="{% url 'admin:password_change' %}">Change password</a> /
+    {% endif %}
+    <a href="{% url 'admin:logout' %}">Log out</a>
+    {% endif %}
+</div>
+{% endblock %}

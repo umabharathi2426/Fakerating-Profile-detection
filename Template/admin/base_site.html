@@ -1,0 +1,113 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Fake Profile Administration{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Increase font size for the entire admin interface */
+    body {
+        font-size: 16px !important;
+    }
+    
+    #header {
+        font-size: 20px !important;
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+    }
+    
+    #site-name {
+        font-size: 24px !important;
+    }
+    
+    .module h2, .module caption, .inline-group h2 {
+        font-size: 20px !important;
+        background: #2c3e50;
+    }
+    
+    #content-main a, 
+    #content-main td, 
+    #content-main th,
+    .model-group a,
+    .model-user a,
+    .model-product a,
+    .model-rating a,
+    #recent-actions-module h2,
+    #recent-actions-module h3,
+    .action-checkbox-column,
+    .field-username,
+    .field-email,
+    .field-is_active {
+        font-size: 18px !important;
+    }
+    
+    /* Recent actions section */
+    .actionlist {
+        font-size: 16px !important;
+    }
+    
+    div.breadcrumbs {
+        background: #34495e;
+    }
+    a:link, a:visited {
+        color: #2980b9;
+    }
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: #2980b9;
+    }
+    .button:hover, input[type=submit]:hover, input[type=button]:hover {
+        background: #3498db;
+    }
+    .button.default, input[type=submit].default, .submit-row input.default {
+        background: #2980b9;
+    }
+    .button.default:hover, input[type=submit].default:hover {
+        background: #3498db;
+    }
+    /* Increased size for user tools */
+    #user-tools {
+        font-size: 16px !important;  /* Increased from 14px */
+        padding: 15px 20px !important;
+    }
+    #user-tools a {
+        font-size: 16px !important;  /* Increased from 14px */
+        font-weight: 500 !important;
+        border-bottom: 2px solid transparent !important;
+        transition: all 0.3s ease !important;
+    }
+    #user-tools a:hover {
+        border-bottom-color: white !important;
+        text-decoration: none !important;
+    }
+    #user-tools #welcome-message {
+        font-size: 16px !important;  /* Increased from 14px */
+        font-weight: 600 !important;
+        margin-right: 15px !important;
+    }
+    #user-tools strong {
+        font-size: 16px !important;  /* Increased from 14px */
+    }
+    /* Theme toggle text */
+    .theme-toggle {
+        font-size: 1.1em !important;
+    }
+    /* Styling for top right corner links */
+    #user-tools a {
+        font-weight: bold;
+        color: white !important;
+    }
+    #site-name a {
+        color: white !important;
+        font-weight: 700;
+        font-size: 1.5em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Fake Profile Administration</a></h1>
+{% endblock %}

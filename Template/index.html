@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Profile Detection</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=2070&q=80') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .navbar {
+            background: rgba(13, 12, 34, 0.95) !important;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        h1.main-heading {
+            color: #1a237e;
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 2rem 0;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'accounts:home' %}" style="color: white !important; font-weight: bold; font-size: 24px;">Fake Profile Detection</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                 
+
+                    {% if user.is_authenticated and user.is_blocked != True %}
+                    <!-- Links visible to authenticated users (Admins or Normal Users) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}" style="color: white !important; font-weight: bold; font-size: 18px;">Site Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:user-list' %}" style="color: white !important; font-weight: bold; font-size: 18px;">User List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:logout' %}" style="color: white !important; font-weight: bold; font-size: 18px;">Logout</a>
+                    </li>
+                    {% else %}
+                    <!-- Links visible to unauthenticated users (Login/Register) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Login
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="loginDropdown">
+                            <li><a class="dropdown-item" href="{% url 'accounts:login' %}">User Login</a></li>
+                            <li><a class="dropdown-item" href="{% url 'admin:login' %}">Admin Login</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:signup' %}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="main-heading text-center">Fake Profile Detection</h1>
+        {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {% if 'blocked' in message|lower %}
+                <span style="color: #ff0000; font-weight: bold;">{{ message }}</span>
+            {% else %}
+                {{ message }}
+            {% endif %}
+            {{form.errors}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+        </div>
+        {% endfor %}
+        {% if user.is_authenticated and user.is_staff %}
+        <!-- Upload Dataset Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">Upload Dataset</h2>
+                <div class="mb-3">
+                    <input type="file" id="fileInput" multiple class="form-control">
+                </div>
+                <button onclick="uploadFiles()" class="btn btn-primary">Upload</button>
+                <div id="uploadStatus" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Train Model Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">Train Model</h2>
+                <button onclick="trainModel()" class="btn btn-success">Train</button>
+                <div id="trainStatus" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Predict Fake Profiles Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">Predict Fake Profiles</h2>
+                <textarea id="predictData" class="form-control mb-3" rows="4" placeholder="Enter JSON data..."></textarea>
+                <button onclick="predictData()" class="btn btn-warning">Predict</button>
+                <div id="predictResult" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Logout Section -->
+        <div class="text-center">
+            <a href="{% url 'accounts:logout' %}" class="btn btn-danger">Logout</a>
+        </div>
+
+        {% elif user.is_authenticated and user.is_blocked != True  %}
+        <!-- Login and Register Links for Guest Users -->
+        <div class="text-center">
+            <a href="{% url 'ratings:product_list' %}" class="btn btn-primary me-2">Products</a>
+            <a href="{% url 'accounts:logout' %}" class="btn btn-secondary">logout</a>
+        </div>
+        {% else %}
+        <div class="text-center">
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-primary dropdown-toggle me-2" type="button" id="loginDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                        Login
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="loginDropdownBtn">
+                        <li><a class="dropdown-item" href="{% url 'accounts:login' %}">User Login</a></li>
+                        <li><a class="dropdown-item" href="{% url 'admin:login' %}">Admin Login</a></li>
+                    </ul>
+                </div>
+                <a class="btn btn-secondary" href="{% url 'accounts:signup' %}">Register</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</body>
+
+</html>

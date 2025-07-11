@@ -1,0 +1,140 @@
+{% extends "admin/login.html" %}
+{% load static %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block extrastyle %}
+<style>
+    body {
+        background: url('https://img.freepik.com/free-vector/dark-gradient-background-with-copy-space_53876-99548.jpg') no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+    }
+    body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 0;
+    }
+    #container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        position: relative;
+        z-index: 1;
+        width: 100%;
+    }
+    #header {
+        background: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin-bottom: 2rem !important;
+    }
+    #content {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 15px !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+        padding: 40px !important;
+        width: 400px !important;
+        margin: 0 auto !important;
+    }
+    .login .form-row {
+        padding: 10px 0 !important;
+        text-align: center !important;
+    }
+    .login .form-row label {
+        font-size: 18px !important;
+        font-weight: bold !important;
+        color: white !important;
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        padding: 0 0 10px 0 !important;
+    }
+    #login-form {
+        margin: 0 !important;
+    }
+    .submit-row {
+        padding: 20px 0 0 0 !important;
+        text-align: center !important;
+        margin: 0 !important;
+    }
+    .submit-row input {
+        background: linear-gradient(45deg, #3498db, #2980b9) !important;
+        padding: 12px 30px !important;
+        border-radius: 8px !important;
+        border: none !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+    }
+    .submit-row input:hover {
+        background: linear-gradient(45deg, #2980b9, #2573a7) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4) !important;
+    }
+    h1 {
+        font-size: 2.8em !important;
+        font-weight: 800 !important;
+        color: white !important;
+        text-transform: uppercase !important;
+        letter-spacing: 3px !important;
+        text-align: center !important;
+        margin: 0 0 30px 0 !important;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3) !important;
+    }
+    .form-row input {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
+        font-size: 16px !important;
+        color: #333 !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+        text-align: center !important;
+    }
+    .form-row input:focus {
+        background: white !important;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3) !important;
+        border-color: #3498db !important;
+        outline: none !important;
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1>ADMIN LOGIN</h1>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Change Username label to Admin
+        var labels = document.getElementsByTagName('label');
+        for(var i = 0; i < labels.length; i++) {
+            if(labels[i].getAttribute('for') == 'id_username') {
+                labels[i].textContent = 'Admin:';
+            }
+        }
+    });
+</script>
+{% endblock %}
